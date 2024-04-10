@@ -8,6 +8,18 @@ class Controller:
         # the model, which implements the logic of the program and holds the data
         self._model = model
 
+    def handle_CercaIscritti(self,e):
+        pass
+
+    def handle_cercaStudenti(self,e):
+        pass
+
+    def handle_cercaCorsi(self,e):
+        pass
+
+    def handle_Iscrivi(self,e):
+        pass
+
     def handle_hello(self, e):
         """Simple function to handle a button-pressed event,
         and consequently print a message on screen"""
