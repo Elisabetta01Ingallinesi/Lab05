@@ -1,5 +1,5 @@
 import flet as ft
-
+from database import corso_DAO
 
 class View(ft.UserControl):
     def __init__(self, page: ft.Page):
@@ -13,30 +13,52 @@ class View(ft.UserControl):
         self._controller = None
         # graphical elements
         self._title = None
-        self.txt_name = None
-        self.btn_hello = None
+        self._ddCorsi = None
+        self._btnCercaIscritti = None
+        self.txt_matricola = None
+        self.txt_nome = None
+        self.txt_cognome = None
+        self._btnCercaStudente = None
+        self._btnCercaCorsi = None
+        self._btnIscrivi = None
         self.txt_result = None
-        self.txt_container = None
+
 
     def load_interface(self):
         """Function that loads the graphical elements of the view"""
         # title
-        self._title = ft.Text("Hello World", color="blue", size=24)
+        self._title = ft.Text("App gestione studenti", color="blue", size=24)
         self._page.controls.append(self._title)
 
         #ROW with some controls
-        # text field for the name
-        self.txt_name = ft.TextField(
-            label="name",
-            width=200,
-            hint_text="Insert a your name"
-        )
+        # Riga0 Dropdown
+        self._ddCorsi = ft.Dropdown(label="Corso", width= 500, hint_text= "Seleziona un corso", options =[], autofocus=True,
+                                    on_change=self._controller.leggi_corso)
+        self._controller.populate_ddCorsi()
 
-        # button for the "hello" reply
-        self.btn_hello = ft.ElevatedButton(text="Hello", on_click=self._controller.handle_hello)
-        row1 = ft.Row([self.txt_name, self.btn_hello],
+        self._btnCercaIscritti = ft.ElevatedButton(text = "Cerca iscritti", on_click= self._controller.handle_CercaIscritti)
+        row0 = ft.Row([self._ddCorsi, self._btnCercaIscritti], alignment=ft.MainAxisAlignment.CENTER)
+        self._page.controls.append(row0)
+
+        # Riga1 matricola nome cognome
+        # text field for the name
+        self.txt_matricola = ft.TextField (label = "matricola", width = 200)
+        self.txt_nome = ft.TextField( label="name", width=200, read_only=True)
+        self.txt_cognome = ft.TextField(label="cognome", width=200, read_only=True)
+
+
+        row1 = ft.Row([self.txt_matricola, self.txt_nome, self.txt_cognome],
                       alignment=ft.MainAxisAlignment.CENTER)
+
         self._page.controls.append(row1)
+
+        # Riga2 bottoni per cerca studente, cerca corsi, iscrivi
+        self._btnCercaStudente = ft.ElevatedButton(text="Cerca studente", on_click=self._controller.handle_cercaStudente)
+        self._btnCercaCorsi = ft.ElevatedButton(text="Cerca corsi", on_click=self._controller.handle_cercaCorsi)
+        self._btnIscrivi = ft.ElevatedButton(text="Iscrivi", on_click=self._controller.handle_Iscrivi)
+
+        row2 = ft.Row([self._btnCercaStudente, self._btnCercaCorsi, self._btnIscrivi], alignment=ft.MainAxisAlignment.CENTER)
+        self._page.controls.append(row2)
 
         # List View where the reply is printed
         self.txt_result = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
@@ -64,3 +86,6 @@ class View(ft.UserControl):
 
     def update_page(self):
         self._page.update()
+
+
+
